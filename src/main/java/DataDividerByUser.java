@@ -20,6 +20,13 @@ public class DataDividerByUser {
 
 			//input user,movie,rating
 			//divide data by user
+			String[] user_move_rating = value.toString().split(",");
+			if (user_move_rating.length<3){
+			    return;
+            }
+			String outputKey = user_move_rating[0];
+			String outputValue = user_move_rating[1]+":"+user_move_rating[2];
+			context.write(new IntWritable(Integer.parseInt(outputKey)), new Text(outputValue));
 		}
 	}
 
@@ -30,6 +37,15 @@ public class DataDividerByUser {
 				throws IOException, InterruptedException {
 
 			//merge data for one user
+            StringBuilder builder = new StringBuilder();
+            while (values.iterator().hasNext()){
+                //put comma first
+                builder.append(",");
+                builder.append(values.iterator().next());
+            }
+            String outputValue = builder.toString().replaceFirst(",","");
+            //output: user\tmovie:rating,move2:rating
+            context.write(key, new Text(outputValue));
 		}
 	}
 

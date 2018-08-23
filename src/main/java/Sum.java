@@ -11,9 +11,6 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 import java.io.IOException;
 
-/**
- * Created by Michelle on 11/12/16.
- */
 public class Sum {
 
     public static class SumMapper extends Mapper<LongWritable, Text, Text, DoubleWritable> {
@@ -21,8 +18,11 @@ public class Sum {
         // map method
         @Override
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-
+            //value: user:movie\t rating
+            //value
             //pass data to reducer
+            String[] line = value.toString().trim().split("\t");
+            context.write(new Text(line[0]), new DoubleWritable(Double.parseDouble(line[1])));
         }
     }
 
@@ -34,6 +34,11 @@ public class Sum {
 
             //user:movie relation
            //calculate the sum
+            double sum =0;
+            while (values.iterator().hasNext()){
+                sum += values.iterator().next().get();
+            }
+            context.write(new Text(key), new DoubleWritable(sum));
         }
     }
 

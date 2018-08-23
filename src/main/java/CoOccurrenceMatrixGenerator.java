@@ -20,7 +20,19 @@ public class CoOccurrenceMatrixGenerator {
 			//value = userid \t movie1: rating, movie2: rating...
 			//key = movie1: movie2 value = 1
 			//calculate each user rating list: <movieA, movieB>
-			
+			String[] user_movieRating = value.toString().split("\t");
+			if (user_movieRating.length<2){
+			    return;
+            }
+            String[] movie_ratings = user_movieRating[1].split(",");
+			for (int i=0; i<movie_ratings.length; i++){
+                String movieA  = movie_ratings[i].split(":")[0];
+			    for (int j=0; j<movie_ratings[i].length(); j++){
+			        String movieB = movie_ratings[i].split(":")[0];
+			        String outputKey = movieA+":"+movieB;
+			        context.write(new Text(outputKey), new IntWritable(1));
+                }
+            }
 		}
 	}
 
@@ -31,6 +43,12 @@ public class CoOccurrenceMatrixGenerator {
 				throws IOException, InterruptedException {
 			//key movie1:movie2 value = iterable<1, 1, 1>
 			//calculate each two movies have been watched by how many people
+
+            int sum = 0;
+            while (values.iterator().hasNext()){
+                sum += values.iterator().next().get();
+            }
+            context.write(key, new IntWritable(sum));
 		}
 	}
 	
