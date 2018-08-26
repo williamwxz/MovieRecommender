@@ -26,8 +26,8 @@ public class CoOccurrenceMatrixGenerator {
             String[] movie_ratings = user_movieRating[1].split(",");
 			for (int i=0; i<movie_ratings.length; i++){
                 String movieA  = movie_ratings[i].split(":")[0];
-			    for (int j=0; j<movie_ratings[i].length(); j++){
-			        String movieB = movie_ratings[i].split(":")[0];
+			    for (int j=0; j<movie_ratings.length; j++){
+			        String movieB = movie_ratings[j].split(":")[0];
 			        String outputKey = movieA+":"+movieB;
 			        context.write(new Text(outputKey), new IntWritable(1));
                 }
