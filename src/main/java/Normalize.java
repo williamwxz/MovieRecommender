@@ -15,32 +15,31 @@ import java.util.Map;
 public class Normalize {
 
     public static class NormalizeMapper extends Mapper<LongWritable, Text, Text, Text> {
-
-        // map method
         @Override
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-
-            //movieA:movieB \t relation
+            //input: movieA:movieB \t relation
             //collect the relationship list for movieA
             String[] movie_relation = value.toString().trim().split("\t");
             String[] movies = movie_relation[0].split(":");
             String movieA = movies[0];
             String movieB = movies[1];
             String relation = movie_relation[1];
+
+            //output:
+            //key:movieA
+            //value: movieB=relation
             context.write(new Text(movieA), new Text(movieB+"="+relation));
         }
     }
 
     public static class NormalizeReducer extends Reducer<Text, Text, Text, Text> {
-        // reduce method
         @Override
         public void reduce(Text key, Iterable<Text> values, Context context)
                 throws IOException, InterruptedException {
-
+            // input:
             //key = movieA, value=<movieB:relation, movieC:relation...>
             //normalize each unit of co-occurrence matrix
             // movieB=relation/sum
-            // outputKey: movieB
             int sum = 0;
             Map<String, Integer> movieRelations = new HashMap<String, Integer>();
             for (Text value:values){
@@ -50,6 +49,8 @@ public class Normalize {
                 sum += relation;
                 movieRelations.put(movieB, relation);
             }
+            // outputKey: movieB
+            // outputValue: movieA=relation/sum
             for (Map.Entry<String, Integer> entry:movieRelations.entrySet()){
                 String outputKey = entry.getKey();
                 double normalized = (double)entry.getValue()/(double)sum;

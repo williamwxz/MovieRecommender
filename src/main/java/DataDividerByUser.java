@@ -13,17 +13,16 @@ import java.io.IOException;
 
 public class DataDividerByUser {
 	public static class DataDividerMapper extends Mapper<LongWritable, Text, IntWritable, Text> {
-
-		// map method
 		@Override
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-
 			//input user,movie,rating
-			//divide data by user
 			String[] user_move_rating = value.toString().split(",");
 			if (user_move_rating.length<3){
 			    return;
             }
+            //output:
+            //key: user
+            //value: movie: rating
 			String outputKey = user_move_rating[0];
 			String outputValue = user_move_rating[1]+":"+user_move_rating[2];
 			context.write(new IntWritable(Integer.parseInt(outputKey)), new Text(outputValue));
@@ -31,7 +30,6 @@ public class DataDividerByUser {
 	}
 
 	public static class DataDividerReducer extends Reducer<IntWritable, Text, IntWritable, Text> {
-		// reduce method
 		@Override
 		public void reduce(IntWritable key, Iterable<Text> values, Context context)
 				throws IOException, InterruptedException {

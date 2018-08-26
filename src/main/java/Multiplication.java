@@ -17,8 +17,6 @@ import java.util.Map;
 
 public class Multiplication {
 	public static class CooccurrenceMapper extends Mapper<LongWritable, Text, Text, Text> {
-
-		// map method
 		@Override
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 			//input: movieB \t movieA=relation
@@ -29,17 +27,13 @@ public class Multiplication {
 	}
 
 	public static class RatingMapper extends Mapper<LongWritable, Text, Text, Text> {
-
-		// map method
 		@Override
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-
 			//input: user,movie,rating
-			//pass data to reducer
             String[] user_movie_rating = value.toString().split(",");
             context.write(new Text(user_movie_rating[1]), new Text(user_movie_rating[0]+":"+user_movie_rating[1]));
 		}
-	}
+    }
 
 	public static class MultiplicationReducer extends Reducer<Text, Text, Text, DoubleWritable> {
 		// reduce method
@@ -58,6 +52,7 @@ public class Multiplication {
             for(Text value:values){
                 String data = value.toString();
                 if (data.contains("=")){
+                    //from co occurence matrix
                     String[] movie_relation = data.split("=");
                     Double relation_val = Double.parseDouble(movie_relation[1]);
                     relations.put(movie_relation[0], relation_val);

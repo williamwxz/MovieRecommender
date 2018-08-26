@@ -13,17 +13,16 @@ import java.io.IOException;
 
 public class CoOccurrenceMatrixGenerator {
 	public static class MatrixGeneratorMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
-
-		// map method
 		@Override
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 			//value = userid \t movie1: rating, movie2: rating...
-			//key = movie1: movie2 value = 1
-			//calculate each user rating list: <movieA, movieB>
 			String[] user_movieRating = value.toString().split("\t");
 			if (user_movieRating.length<2){
 			    return;
             }
+            //output:
+            //key: movieA:movieB
+            //value: 1
             String[] movie_ratings = user_movieRating[1].split(",");
 			for (int i=0; i<movie_ratings.length; i++){
                 String movieA  = movie_ratings[i].split(":")[0];
@@ -37,13 +36,11 @@ public class CoOccurrenceMatrixGenerator {
 	}
 
 	public static class MatrixGeneratorReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
-		// reduce method
 		@Override
 		public void reduce(Text key, Iterable<IntWritable> values, Context context)
 				throws IOException, InterruptedException {
-			//key movie1:movie2 value = iterable<1, 1, 1>
-			//calculate each two movies have been watched by how many people
-
+			//key movie1:movie2
+            //value = iterable<1, 1, 1>
             int sum = 0;
             while (values.iterator().hasNext()){
                 sum += values.iterator().next().get();
