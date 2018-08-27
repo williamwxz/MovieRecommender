@@ -37,7 +37,8 @@ public class Normalize {
         public void reduce(Text key, Iterable<Text> values, Context context)
                 throws IOException, InterruptedException {
             // input:
-            //key = movieA, value=<movieB:relation, movieC:relation...>
+            //key = movieA,
+            //value: <movieB=relation, movieC=relation...>
             //normalize each unit of co-occurrence matrix
             // movieB=relation/sum
             int sum = 0;
