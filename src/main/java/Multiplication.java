@@ -31,7 +31,7 @@ public class Multiplication {
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 			//input: user,movie,rating
             String[] user_movie_rating = value.toString().split(",");
-            context.write(new Text(user_movie_rating[1]), new Text(user_movie_rating[0]+":"+user_movie_rating[1]));
+            context.write(new Text(user_movie_rating[1]), new Text(user_movie_rating[0]+":"+user_movie_rating[2]));
 		}
     }
 
