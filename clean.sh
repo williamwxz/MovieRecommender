@@ -9,4 +9,4 @@ hdfs dfs -rm -r /Multiplication
 
 hdfs dfs -rm -r /Sum
 
-hdfs dfs -rm -rf /Average
+hdfs dfs -rm -r /Average
