@@ -48,7 +48,7 @@ public class NullValueHandler {
 
     public static void main(String[] args) throws Exception{
         Configuration conf = new Configuration();
-        conf.setFloat("movies", Integer.parseInt(args[3]));
+        conf.setFloat("movies", Integer.parseInt(args[2]));
 
         Job job = Job.getInstance(conf);
         job.setMapperClass(NullMapper.class);
