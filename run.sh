@@ -7,4 +7,4 @@ hdfs dfs -mkdir /input
 hdfs dfs -put input/* /input
 
 # run jar
-hadoop jar recommender.jar Driver /input /dataDividedByUser /coOccurrenceMatrix /Normalize /Multiplication /Sum
+hadoop jar recommender.jar Driver /input /dataDividedByUser /coOccurrenceMatrix /Normalize /Multiplication /Sum /Average 8
